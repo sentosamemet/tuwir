@@ -30,6 +30,22 @@ chrome_options.add_argument("--safebrowsing-disable-auto-update")  # Nonaktifkan
 chrome_options.add_argument("--disable-component-update")  # Nonaktifkan pembaruan komponen
 chrome_options.add_argument("--disable-domain-reliability")  # Nonaktifkan keandalan domain
 
+# --- Argumen tambahan untuk memblokir koneksi ke Google Optimization Guide ---
+# Menonaktifkan fitur-fitur yang terkait dengan Optimization Guide dan sejenisnya
+chrome_options.add_argument("--disable-features=OptimizationHints,OptimizationTargetPrediction,SafeBrowsing")
+chrome_options.add_argument("--disable-features=Translate,InterestCohortFeaturePolicy")
+chrome_options.add_argument("--disable-background-timer-throttling") # Mencegah throttling timer di latar belakang
+chrome_options.add_argument("--disable-ipc-flooding-protection") # Melindungi dari serangan flooding IPC
+chrome_options.add_argument("--disable-site-specific-hsts-bypass") # Menonaktifkan bypass HSTS
+chrome_options.add_argument("--disable-hang-monitor") # Menonaktifkan monitor hang
+chrome_options.add_argument("--disable-popup-blocking") # Menonaktifkan pemblokiran popup
+chrome_options.add_argument("--disable-prompt-on-repost") # Menonaktifkan prompt saat memposting ulang
+chrome_options.add_argument("--disable-web-security") # Menonaktifkan keamanan web (gunakan dengan hati-hati)
+chrome_options.add_argument("--no-first-run") # Mencegah menjalankan proses 'first run'
+chrome_options.add_argument("--no-default-browser-check") # Mencegah pemeriksaan browser default
+chrome_options.add_argument("--disable-blink-features=AutomationControlled") # Menyembunyikan bahwa browser dikontrol oleh otomatisasi
+# --- Akhir argumen tambahan ---
+
 driver = webdriver.Chrome(seleniumwire_options=options, options=chrome_options)
 
 driver.get("https://sepolia-faucet.pk910.de/#/mine/194eb172-77e0-42f7-acbd-09c13bc5c539")
