@@ -1,4 +1,5 @@
 
+
 from seleniumwire import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -6,8 +7,8 @@ import time
 
 options = {
     'proxy': {
-        'http': 'http://bc8f18fee2c9ba5e5aa3__cr.sa:0a399bcb3afc18d6@gw.dataimpulse.com:10033',
-        'https': 'https://bc8f18fee2c9ba5e5aa3__cr.sa:0a399bcb3afc18d6@gw.dataimpulse.com:10033',
+        'http': 'http://bc8f18fee2c9ba5e5aa3__cr.sa:0a399bcb3afc18d6@gw.dataimpulse.com:10013',
+        'https': 'https://bc8f18fee2c9ba5e5aa3__cr.sa:0a399bcb3afc18d6@gw.dataimpulse.com:10013',
         'no_proxy': 'localhost,127.0.0.1'
     }
 }
@@ -48,7 +49,7 @@ chrome_options.add_argument("--disable-blink-features=AutomationControlled") # M
 
 driver = webdriver.Chrome(seleniumwire_options=options, options=chrome_options)
 
-driver.gethttps:("https://sepolia-faucet.pk910.de/#/mine/c67f584e-a8c2-4174-a48b-fcc7ee592fe0")
+driver.get("https://sepolia-faucet.pk910.de/#/mine/c67f584e-a8c2-4174-a48b-fcc7ee592fe0")
 time.sleep(50000)
 
 div_element = driver.find_element(By.CLASS_NAME, "col-3")
