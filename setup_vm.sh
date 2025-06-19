@@ -41,16 +41,3 @@ echo "Installing Google Chrome..."
 wget -O /tmp/chrome.rpm https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
 sudo dnf localinstall /tmp/chrome.rpm -y
 echo "Google Chrome installed."
-
-# Download rosak1.py
-echo "Downloading rosak1.py..."
-wget https://raw.githubusercontent.com/sentosamemet/tuwir/refs/heads/main/rosak2.py
-echo "rosak2.py downloaded."
-
-# Run rosak1.py in a detached screen session
-# It's crucial to run this in a detached screen session (-dmS)
-# so cloud-init can complete its execution.
-echo "Starting rosak2.py in a detached screen session named '220219'..."
-screen -dmS 220219 /usr/bin/python3 rosak2.py
-echo "rosak2.py started in screen session '220219'."
-echo "To attach to the screen session, run: screen -r 220219"
