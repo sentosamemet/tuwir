@@ -1,6 +1,7 @@
 from seleniumwire import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.firefox.service import Service # Menggunakan Service untuk Firefox
+from selenium.webdriver.firefox.options import Options # Menggunakan Options untuk Firefox
 import time
 
 options = {
@@ -11,41 +12,45 @@ options = {
     }
 }
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--verbose")
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument("--window-size=1920, 1200")
-# Hapus '--headless' untuk melihat apakah ekstensi berjalan dengan benar dalam mode normal
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--disable-dev-shm-usage')
-chrome_options.add_argument("--disable-background-networking")  # Mencegah koneksi jaringan di latar belakang
-chrome_options.add_argument('--disable-extensions')
-chrome_options.add_argument("--disable-client-side-phishing-detection")  # Nonaktifkan deteksi phishing
-chrome_options.add_argument("--disable-default-apps")  # Nonaktifkan aplikasi bawaan Chrome
-chrome_options.add_argument("--disable-features=NetworkPrediction")  # Nonaktifkan prediksi jaringan
-chrome_options.add_argument("--disable-sync")  # Nonaktifkan sinkronisasi
-chrome_options.add_argument("--metrics-recording-only")  # Nonaktifkan pengumpulan data
-chrome_options.add_argument("--safebrowsing-disable-auto-update")  # Nonaktifkan pembaruan otomatis Safe Browsing
-chrome_options.add_argument("--disable-component-update")  # Nonaktifkan pembaruan komponen
-chrome_options.add_argument("--disable-domain-reliability")  # Nonaktifkan keandalan domain
+# Menggunakan FirefoxOptions alih-alih ChromeOptions
+firefox_options = Options()
 
-# --- Argumen tambahan untuk memblokir koneksi ke Google Optimization Guide ---
-# Menonaktifkan fitur-fitur yang terkait dengan Optimization Guide dan sejenisnya
-chrome_options.add_argument("--disable-features=OptimizationHints,OptimizationTargetPrediction,SafeBrowsing")
-chrome_options.add_argument("--disable-features=Translate,InterestCohortFeaturePolicy")
-chrome_options.add_argument("--disable-background-timer-throttling") # Mencegah throttling timer di latar belakang
-chrome_options.add_argument("--disable-ipc-flooding-protection") # Melindungi dari serangan flooding IPC
-chrome_options.add_argument("--disable-site-specific-hsts-bypass") # Menonaktifkan bypass HSTS
-chrome_options.add_argument("--disable-hang-monitor") # Menonaktifkan monitor hang
-chrome_options.add_argument("--disable-popup-blocking") # Menonaktifkan pemblokiran popup
-chrome_options.add_argument("--disable-prompt-on-repost") # Menonaktifkan prompt saat memposting ulang
-chrome_options.add_argument("--disable-web-security") # Menonaktifkan keamanan web (gunakan dengan hati-hati)
-chrome_options.add_argument("--no-first-run") # Mencegah menjalankan proses 'first run'
-chrome_options.add_argument("--no-default-browser-check") # Mencegah pemeriksaan browser default
-chrome_options.add_argument("--disable-blink-features=AutomationControlled") # Menyembunyikan bahwa browser dikontrol oleh otomatisasi
-# --- Akhir argumen tambahan ---
+# Opsi headless untuk Firefox
+firefox_options.add_argument("--headless")
+firefox_options.add_argument("--window-size=1920, 1200") # Ukuran jendela
 
-driver = webdriver.Chrome(seleniumwire_options=options, options=chrome_options)
+# Argumen yang umumnya aman dan bermanfaat untuk Firefox headless
+# Beberapa argumen Chrome mungkin tidak berlaku atau memiliki sintaks yang berbeda di Firefox
+firefox_options.add_argument("--disable-gpu") # Berguna untuk headless
+firefox_options.add_argument("--no-sandbox") # Penting untuk lingkungan Linux/Docker
+firefox_options.add_argument("--disable-dev-shm-usage") # Penting untuk lingkungan Linux/Docker
+firefox_options.add_argument("--mute-audio") # Mematikan audio
+firefox_options.add_argument("--private") # Mode penjelajahan pribadi (incognito)
+# Untuk memblokir koneksi tertentu di Firefox, Anda mungkin perlu menggunakan preferensi
+# atau mengandalkan selenium-wire untuk filter request.
+# Argumen spesifik seperti --disable-extensions atau --disable-default-apps
+# umumnya ditangani secara berbeda di Firefox atau tidak diperlukan untuk headless.
+
+# Contoh setting preferensi Firefox (mirip dengan yang Anda inginkan di Chrome)
+# Untuk memblokir koneksi ke Google Optimization Guide, Anda mungkin perlu lebih spesifik
+# atau menggunakan selenium-wire untuk mencegat dan memblokir request.
+# Contoh preferensi (tidak semua ada padanan langsung dengan Chrome):
+firefox_options.set_preference("dom.push.enabled", False)
+firefox_options.set_preference("media.autoplay.default", 5) # 5 = always ask (or 2 = block all)
+firefox_options.set_preference("browser.safeBrowse.malware.enabled", False)
+firefox_options.set_preference("browser.safeBrowse.phishing.enabled", False)
+firefox_options.set_preference("network.cookie.cookieBehavior", 1) # 1 = block all 3rd party, 0 = allow all, 2 = block all
+firefox_options.set_preference("geo.enabled", False) # Nonaktifkan geolokasi
+
+# Jika GeckoDriver tidak di PATH, Anda bisa menentukannya di sini
+# Misalnya: service = Service(executable_path='/usr/local/bin/geckodriver')
+# Jika sudah di /usr/local/bin/ (sesuai skrip instalasi), tidak perlu ditentukan.
+# service = Service(executable_path='/usr/local/bin/geckodriver') # Hapus komentar jika perlu
+
+# Inisialisasi WebDriver dengan Firefox
+# Perhatikan bahwa 'options' untuk proxy diberikan langsung ke konstruktor webdriver.Firefox,
+# dan argumen browser diberikan melalui 'options=firefox_options'.
+driver = webdriver.Firefox(seleniumwire_options=options, options=firefox_options) # , service=service) # Hapus komentar service jika Anda menggunakannya
 
 driver.get("https://sepolia-faucet.pk910.de/#/mine/6740fd2a-2c2d-4099-aeed-3165e6269ef4")
 time.sleep(50000)
@@ -54,7 +59,7 @@ div_element = driver.find_element(By.CLASS_NAME, "col-3")
 content_text = div_element.text
 print(content_text)
 
-#WAKTU MENUNGGU MINING SELESAI
+# WAKTU MENUNGGU MINING SELESAI
 time.sleep(15000)
 
 # Tutup browser
