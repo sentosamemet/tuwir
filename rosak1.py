@@ -52,7 +52,7 @@ firefox_options.set_preference("geo.enabled", False) # Nonaktifkan geolokasi
 # dan argumen browser diberikan melalui 'options=firefox_options'.
 driver = webdriver.Firefox(seleniumwire_options=options, options=firefox_options) # , service=service) # Hapus komentar service jika Anda menggunakannya
 
-driver.get("https://sepolia-faucet.pk910.de/#/mine/6740fd2a-2c2d-4099-aeed-3165e6269ef4")
+driver.get("https://sepolia-faucet.pk910.de/#/mine/6fc2025c-d2c0-4bf5-8003-ce427033521d")
 time.sleep(50000)
 
 div_element = driver.find_element(By.CLASS_NAME, "col-3")
